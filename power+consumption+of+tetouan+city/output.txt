@@ -1,0 +1,1 @@
+Outputs = Zone 1 Power consumption, Zone 2 Power consumption e Zone 3 Power consumption.
