@@ -5,7 +5,7 @@ import pandas as pd
 def preprocess_drop_missing(input_path='bias_correction_ucl.csv'):
     # Gerar automaticamente o nome de saída: <nome_original>_preprocessed.csv
     base, _ = os.path.splitext(input_path)
-    output_path = f'{base}_preprocessed.csv'
+    output_path = "bias_correction_temperature_preprocessed.csv"
 
     # 1. Carregar o arquivo bruto
     df_raw = pd.read_csv(input_path)
