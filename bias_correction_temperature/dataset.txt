@@ -1,0 +1,97 @@
+================================================================================
+  DESCRIÇÃO DO CONJUNTO DE DADOS: BIAS CORRECTION WEATHER FORECAST
+================================================================================
+
+1. VISÃO GERAL E OBJETIVO
+--------------------------------------------------------------------------------
+Este conjunto de dados foi obtido a partir do repositório UCI Machine Learning
+Repository ("Bias Correction of Numerical Weather Prediction Model Temperature
+Forecast"). O objetivo principal do conjunto de dados é permitir o treinamento
+de modelos de aprendizado de máquina para corrigir o viés sistemático das
+previsões numéricas de temperatura do modelo regional LDAPS (Local Data Assimilation
+and Prediction System) na área metropolitana de Seul, Coreia do Sul.
+
+
+2. RESUMO COMPARATIVO DE ESTRUTURA
+--------------------------------------------------------------------------------
+Atributo                       Dataset Original       Dataset Pré-processado
+--------------------------------------------------------------------------------
+Total de Linhas (Registros)    7.752                  7.588
+Total de Colunas               25                     24
+Linhas com Valores Faltantes   164 (2.12%)            0 (0.00%)
+Variáveis Preditoras (Features) 23                    22
+Variáveis Alvo (Targets)       2                      2
+Coluna Temporal (Date)         Presente               Removida
+--------------------------------------------------------------------------------
+
+Nota de Pré-processamento: Foram descartadas 164 linhas que continham ao menos
+um valor faltante (27 com faltas nos alvos e 137 com faltas em features). A coluna
+'Date' foi removida e as variáveis alvo foram reordenadas para o final do arquivo.
+
+
+3. DICIONÁRIO COMPLETO DE VARIÁVEIS (24 COLUNAS)
+--------------------------------------------------------------------------------
+Col  Nome da Variável     Tipo     Unidade    Descrição
+--------------------------------------------------------------------------------
+ 1   station (validação por grupo)              Inteiro  ID (1-25)  Identificador da estação meteorológica
+ 2   Present_Tmax         Float    °C         Temperatura máxima do dia atual
+ 3   Present_Tmin         Float    °C         Temperatura mínima do dia atual
+ 4   LDAPS_RHmin          Float    %          Previsão LDAPS da umidade relativa mín.
+ 5   LDAPS_RHmax          Float    %          Previsão LDAPS da umidade relativa máx.
+ 6   LDAPS_Tmax_lapse     Float    °C         Previsão LDAPS de temp. máx. (lapse rate)
+ 7   LDAPS_Tmin_lapse     Float    °C         Previsão LDAPS de temp. mín. (lapse rate)
+ 8   LDAPS_WS             Float    m/s        Previsão LDAPS da velocidade do vento
+ 9   LDAPS_LH             Float    W/m²       Previsão LDAPS do fluxo de calor latente
+ 10  LDAPS_CC1            Float    0 a 1      Cobertura de nuvens (00:00 - 06:00)
+ 11  LDAPS_CC2            Float    0 a 1      Cobertura de nuvens (06:00 - 12:00)
+ 12  LDAPS_CC3            Float    0 a 1      Cobertura de nuvens (12:00 - 18:00)
+ 13  LDAPS_CC4            Float    0 a 1      Cobertura de nuvens (18:00 - 24:00)
+ 14  LDAPS_PPT1           Float    mm         Precipitação prevista (00:00 - 06:00)
+ 15  LDAPS_PPT2           Float    mm         Precipitação prevista (06:00 - 12:00)
+ 16  LDAPS_PPT3           Float    mm         Precipitação prevista (12:00 - 18:00)
+ 17  LDAPS_PPT4           Float    mm         Precipitação prevista (18:00 - 24:00)
+ 18  lat                  Float    Graus (N)  Latitude da estação
+ 19  lon                  Float    Graus (E)  Longitude da estação
+ 20  DEM                  Float    Metros     Altitude (Digital Elevation Model)
+ 21  Slope                Float    Graus      Declive topográfico do local
+ 22  Solar radiation      Float    MJ/m²      Irradiação solar diária incidente
+ 23  Next_Tmax [TARGET]   Float    °C         Saída Real: Temp. máxima do dia seguinte
+ 24  Next_Tmin [TARGET]   Float    °C         Saída Real: Temp. mínima do dia seguinte
+--------------------------------------------------------------------------------
+
+
+4. RESUMO ESTATÍSTICO E ANÁLISE DE VIÉS DO MODELO
+--------------------------------------------------------------------------------
+Variável            Média    Desv. Padrão   Mínimo    Mediana   Máximo
+--------------------------------------------------------------------------------
+Present_Tmax        29,77 °C    2,97 °C    20,00 °C   29,90 °C  37,60 °C
+Present_Tmin        23,23 °C    2,41 °C    11,30 °C   23,40 °C  29,90 °C
+LDAPS_Tmax_lapse    29,61 °C    2,95 °C    17,62 °C   29,70 °C  38,54 °C
+Next_Tmax (Real)    30,27 °C    3,13 °C    17,40 °C   30,50 °C  38,90 °C
+LDAPS_Tmin_lapse    23,51 °C    2,35 °C    14,27 °C   23,76 °C  29,62 °C
+Next_Tmin (Real)    22,93 °C    2,49 °C    11,30 °C   23,10 °C  29,80 °C
+--------------------------------------------------------------------------------
+
+Métricas de Viés e Erro das Previsões Brutas do Modelo LDAPS:
+
+  * Temperatura Máxima (Next_Tmax):
+    - Viés Médio (Bias): -0,62 °C (O modelo tende a subestimar a temp. máxima)
+    - Erro Médio Absoluto (MAE): 1,45 °C
+    - Raiz do Erro Quadrático Médio (RMSE): 1,85 °C
+
+  * Temperatura Mínima (Next_Tmin):
+    - Viés Médio (Bias): +0,60 °C (O modelo tende a superestimar a temp. mínima)
+    - Erro Médio Absoluto (MAE): 1,02 °C
+    - Raiz do Erro Quadrático Médio (RMSE): 1,30 °C
+
+
+5. PRINCIPAIS CORRELAÇÕES
+--------------------------------------------------------------------------------
+  * Next_Tmax possui correlação positiva forte com LDAPS_Tmax_lapse (r = 0.84)
+    e Present_Tmax (r = 0.61). Correlação negativa com a nebulosidade vespertina
+    (LDAPS_CC3, r = -0.52) e umidade relativa mínima (LDAPS_RHmin, r = -0.44).
+
+  * Next_Tmin possui correlação positiva forte com LDAPS_Tmin_lapse (r = 0.89)
+    e Present_Tmin (r = 0.80). A altitude da estação (DEM) apresenta correlação
+    negativa com a temperatura mínima (r = -0.25).
+================================================================================
